@@ -1,5 +1,3 @@
-# 3. The percentage of votes each candidate won
-# 4. The total number of votes each candidate won
 # 5. The winner of the election based on popular vote
 
 # Import the datetime class from the datetime module
@@ -21,6 +19,10 @@ total_votes = 0
 candidate_options = []
 # Declare empty dictionary for total votes per candidate
 candidate_votes = {}
+# Initialize variables for winning candidate and count tracker
+winning_candidate = ""
+winning_count = 0
+winning_percentage = 0
 
 # Open the election results, read the file.
 with open(file_to_load) as election_data:
@@ -47,6 +49,7 @@ with open(file_to_load) as election_data:
 
         # Add one vote for this candidate
         candidate_votes[candidate_name] += 1
+
         
 # Print out total votes, all candidates, total votes per candidate
 print(total_votes)
@@ -54,14 +57,27 @@ print(candidate_options)
 print(candidate_votes)
 
 # Determine the percentage of votes for each candidate by looping
-# 1. Iterate through candidate list
+# Iterate through candidate list
 for candidate_name in candidate_votes:
-    # 2. Retrieve vote count of a candidate
+    # Retrieve vote count of a candidate
     votes = candidate_votes[candidate_name]
-    # 3. Calculate percentage of votes
+    # Calculate percentage of votes
     vote_percentage = float(votes) / float(total_votes) * 100
-    # 4. Print candidate name and percentage of votes
-    print(f"{candidate_name}: received {vote_percentage:.1f}% of the vote.")
+    # Print candidate name and percentage of votes
+    print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+    # Determine if the vote count is greater than the winning count
+    if (votes > winning_count) and (vote_percentage > winning_percentage):
+        winning_count = votes
+        winning_percentage = vote_percentage
+        # Set winning candidate equal to the candidate name
+        winning_candidate = candidate_name
+winning_candidate_summary = (
+    f"-----------------------\n"
+    f"Winner: {winning_candidate}\n"
+    f"Winning Vote Count: {winning_count:,}\n"
+    f"Winning Percentage: {winning_percentage:.1f}%\n"
+    f"-----------------------\n")
+print(winning_candidate_summary)
 
 # Create a filename variable to a path to the file.
 file_to_save = os.path.join("analysis", "election_analysis.txt")
